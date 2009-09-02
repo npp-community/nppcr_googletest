@@ -20,7 +20,7 @@
 			Name="Debug|Win32"
 			OutputDirectory="Debug"
 			ConfigurationType="1"
-			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops;.\N++CR.vsprops"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops;.\N++CR.vsprops;.\RunSelfPostBuild.vsprops"
 			CharacterSet="2"
 			>
 			<Tool
@@ -96,7 +96,7 @@
 			Name="Release|Win32"
 			OutputDirectory="Release"
 			ConfigurationType="1"
-			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops;.\N++CR.vsprops"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops;.\N++CR.vsprops;.\RunSelfPostBuild.vsprops"
 			CharacterSet="2"
 			>
 			<Tool
