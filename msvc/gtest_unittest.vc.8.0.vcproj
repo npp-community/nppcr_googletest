@@ -89,6 +89,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
+				CommandLine="&quot;$(TargetPath)&quot;"
 			/>
 		</Configuration>
 		<Configuration
@@ -164,13 +165,14 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
+				CommandLine="&quot;$(TargetPath)&quot;"
 			/>
 		</Configuration>
 	</Configurations>
 	<References>
 		<ProjectReference
 			ReferencedProjectIdentifier="{3AF54C8A-10BF-4332-9147-F68ED9862032}"
-			RelativePathToProject=".\gtest_main.vcproj"
+			RelativePathToProject=".\gtest_main.vc.8.0.vcproj"
 		/>
 	</References>
 	<Files>
