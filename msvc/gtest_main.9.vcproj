@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="gtest_output_test_"
-	ProjectGUID="{A4903F73-ED6C-4972-863E-F7355EB0145E}"
-	RootNamespace="gtest_output_test_"
+	Name="gtest_main"
+	ProjectGUID="{3AF54C8A-10BF-4332-9147-F68ED9862032}"
+	RootNamespace="gtest_main"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="131072"
 	>
@@ -19,8 +19,8 @@
 		<Configuration
 			Name="Debug|Win32"
 			OutputDirectory="Debug"
-			ConfigurationType="1"
-			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops;.\N++CR.vsprops"
+			ConfigurationType="4"
+			InheritedPropertySheets=".\N++CR.vsprops"
 			CharacterSet="2"
 			>
 			<Tool
@@ -41,11 +41,11 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
+				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
-				UsePrecompiledHeader="2"
+				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="false"
 				DebugInformationFormat="4"
@@ -60,21 +60,11 @@
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLinkerTool"
-				OutputFile="$(OutDir)/gtest_output_test_.exe"
-				LinkIncremental="2"
-				GenerateDebugInformation="true"
-				ProgramDatabaseFile="$(OutDir)/gtest_output_test_.pdb"
-				SubSystem="1"
-				RandomizedBaseAddress="1"
-				DataExecutionPrevention="0"
-				TargetMachine="1"
+				Name="VCLibrarianTool"
+				OutputFile="$(OutDir)/$(ProjectName)d.lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -86,17 +76,14 @@
 				Name="VCFxCopTool"
 			/>
 			<Tool
-				Name="VCAppVerifierTool"
-			/>
-			<Tool
 				Name="VCPostBuildEventTool"
 			/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
 			OutputDirectory="Release"
-			ConfigurationType="1"
-			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops;.\N++CR.vsprops"
+			ConfigurationType="4"
+			InheritedPropertySheets=".\N++CR.vsprops"
 			CharacterSet="2"
 			>
 			<Tool
@@ -116,9 +103,9 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
+				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
 				RuntimeLibrary="0"
-				UsePrecompiledHeader="2"
+				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="false"
 				DebugInformationFormat="3"
@@ -133,22 +120,11 @@
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLinkerTool"
-				OutputFile="$(OutDir)/gtest_output_test_.exe"
-				LinkIncremental="1"
-				GenerateDebugInformation="true"
-				SubSystem="1"
-				OptimizeReferences="2"
-				EnableCOMDATFolding="2"
-				RandomizedBaseAddress="1"
-				DataExecutionPrevention="0"
-				TargetMachine="1"
+				Name="VCLibrarianTool"
+				OutputFile="$(OutDir)/$(ProjectName).lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -160,9 +136,6 @@
 				Name="VCFxCopTool"
 			/>
 			<Tool
-				Name="VCAppVerifierTool"
-			/>
-			<Tool
 				Name="VCPostBuildEventTool"
 			/>
 		</Configuration>
@@ -170,7 +143,7 @@
 	<References>
 		<ProjectReference
 			ReferencedProjectIdentifier="{C8F6C172-56F2-4E76-B5FA-C3B423B31BE7}"
-			RelativePathToProject=".\gtest.vcproj"
+			RelativePathToProject=".\gtest.vc.9.0.vcproj"
 		/>
 	</References>
 	<Files>
@@ -180,18 +153,14 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath="..\test\gtest_output_test_.cc"
+				RelativePath="..\src\gtest_main.cc"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
-						Optimization="1"
 						AdditionalIncludeDirectories="&quot;..&quot;;&quot;..\include&quot;"
-						BasicRuntimeChecks="0"
-						UsePrecompiledHeader="0"
-						DebugInformationFormat="3"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -200,7 +169,6 @@
 					<Tool
 						Name="VCCLCompilerTool"
 						AdditionalIncludeDirectories="&quot;..&quot;;&quot;..\include&quot;"
-						UsePrecompiledHeader="0"
 					/>
 				</FileConfiguration>
 			</File>
@@ -210,6 +178,54 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
+			<File
+				RelativePath="..\include\gtest\internal\gtest-death-test-internal.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\gtest\gtest-death-test.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\gtest\internal\gtest-filepath.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\gtest-internal-inl.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\gtest\internal\gtest-internal.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\gtest\gtest-message.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\gtest\internal\gtest-port.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\gtest\gtest-spi.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\gtest\internal\gtest-string.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\gtest\gtest.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\gtest\gtest_pred_impl.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\gtest\gtest_prod.h"
+				>
+			</File>
 		</Filter>
 	</Files>
 	<Globals>

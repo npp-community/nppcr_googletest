@@ -20,7 +20,7 @@
 			Name="Debug|Win32"
 			OutputDirectory="Debug"
 			ConfigurationType="4"
-			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops;.\N++CR.vsprops"
+			InheritedPropertySheets=".\N++CR.vsprops"
 			CharacterSet="2"
 			>
 			<Tool
@@ -46,9 +46,10 @@
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
 				UsePrecompiledHeader="0"
-				WarningLevel="3"
+				WarningLevel="4"
 				Detect64BitPortabilityProblems="false"
-				DebugInformationFormat="4"
+				DebugInformationFormat="3"
+				ShowIncludes="false"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -83,7 +84,7 @@
 			Name="Release|Win32"
 			OutputDirectory="Release"
 			ConfigurationType="4"
-			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops;.\N++CR.vsprops"
+			InheritedPropertySheets=".\N++CR.vsprops"
 			CharacterSet="2"
 			>
 			<Tool
