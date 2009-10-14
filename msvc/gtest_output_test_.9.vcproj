@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="gtest_color_test_"
-	ProjectGUID="{ABC5A7E8-072C-4A2D-B186-19EA5394B9C6}"
-	RootNamespace="gtest_color_test_"
+	Name="gtest_output_test_"
+	ProjectGUID="{A4903F73-ED6C-4972-863E-F7355EB0145E}"
+	RootNamespace="gtest_output_test_"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="131072"
 	>
@@ -20,7 +20,7 @@
 			Name="Debug|Win32"
 			OutputDirectory="Debug"
 			ConfigurationType="1"
-			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops;.\N++CR.vsprops"
+			InheritedPropertySheets=".\N++CR.vsprops"
 			CharacterSet="2"
 			>
 			<Tool
@@ -61,10 +61,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="$(OutDir)/gtest_color_test_.exe"
+				OutputFile="$(OutDir)/gtest_output_test_.exe"
 				LinkIncremental="2"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="$(OutDir)/gtest_color_test_.pdb"
+				ProgramDatabaseFile="$(OutDir)/gtest_output_test_.pdb"
 				SubSystem="1"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
@@ -96,7 +96,7 @@
 			Name="Release|Win32"
 			OutputDirectory="Release"
 			ConfigurationType="1"
-			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops;.\N++CR.vsprops"
+			InheritedPropertySheets=".\N++CR.vsprops"
 			CharacterSet="2"
 			>
 			<Tool
@@ -134,7 +134,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="$(OutDir)/gtest_color_test_.exe"
+				OutputFile="$(OutDir)/gtest_output_test_.exe"
 				LinkIncremental="1"
 				GenerateDebugInformation="true"
 				SubSystem="1"
@@ -170,7 +170,7 @@
 	<References>
 		<ProjectReference
 			ReferencedProjectIdentifier="{C8F6C172-56F2-4E76-B5FA-C3B423B31BE7}"
-			RelativePathToProject=".\gtest.vcproj"
+			RelativePathToProject=".\gtest.vc.9.0.vcproj"
 		/>
 	</References>
 	<Files>
@@ -180,15 +180,18 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath="..\test\gtest_color_test_.cc"
+				RelativePath="..\test\gtest_output_test_.cc"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
+						Optimization="1"
 						AdditionalIncludeDirectories="&quot;..&quot;;&quot;..\include&quot;"
+						BasicRuntimeChecks="0"
 						UsePrecompiledHeader="0"
+						DebugInformationFormat="3"
 					/>
 				</FileConfiguration>
 				<FileConfiguration

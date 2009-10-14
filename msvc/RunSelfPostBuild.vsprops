@@ -6,6 +6,6 @@
 	>
 	<Tool
 		Name="VCPostBuildEventTool"
-		CommandLine="$(TargetPath)"
+		CommandLine="&quot;$(TargetPath)&quot;"
 	/>
 </VisualStudioPropertySheet>
