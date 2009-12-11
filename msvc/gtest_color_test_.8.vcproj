@@ -16,9 +16,8 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="Debug"
 			ConfigurationType="1"
-			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops;.\N++CR.vsprops"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops;.\N++CR.8.vsprops"
 			CharacterSet="2"
 			>
 			<Tool
@@ -92,9 +91,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="Release"
 			ConfigurationType="1"
-			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops;.\N++CR.vsprops"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops;.\N++CR.8.vsprops"
 			CharacterSet="2"
 			>
 			<Tool
@@ -168,7 +166,7 @@
 	<References>
 		<ProjectReference
 			ReferencedProjectIdentifier="{C8F6C172-56F2-4E76-B5FA-C3B423B31BE7}"
-			RelativePathToProject=".\gtest.vcproj"
+			RelativePathToProject=".\gtest.8.vcproj"
 		/>
 	</References>
 	<Files>
