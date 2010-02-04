@@ -1,5 +1,34 @@
-// Copyright 2008 Google Inc. All Rights Reserved.
+// Copyright 2008 Google Inc.
+// All Rights Reserved.
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions are
+// met:
+//
+//     * Redistributions of source code must retain the above copyright
+// notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above
+// copyright notice, this list of conditions and the following disclaimer
+// in the documentation and/or other materials provided with the
+// distribution.
+//     * Neither the name of Google Inc. nor the names of its
+// contributors may be used to endorse or promote products derived from
+// this software without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+// "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+// A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+// OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+// SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+// LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+// DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+// THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
 // Author: mheule@google.com (Markus Heule)
+//
 
 #include <gtest/gtest-test-part.h>
 
@@ -9,10 +38,6 @@ using testing::Test;
 using testing::TestPartResult;
 using testing::TestPartResultArray;
 
-using testing::TPRT_FATAL_FAILURE;
-using testing::TPRT_NONFATAL_FAILURE;
-using testing::TPRT_SUCCESS;
-
 namespace {
 
 // Tests the TestPartResult class.
@@ -21,18 +46,18 @@ namespace {
 class TestPartResultTest : public Test {
  protected:
   TestPartResultTest()
-      : r1_(TPRT_SUCCESS, "foo/bar.cc", 10, "Success!"),
-        r2_(TPRT_NONFATAL_FAILURE, "foo/bar.cc", -1, "Failure!"),
-        r3_(TPRT_FATAL_FAILURE, NULL, -1, "Failure!") {}
+      : r1_(TestPartResult::kSuccess, "foo/bar.cc", 10, "Success!"),
+        r2_(TestPartResult::kNonFatalFailure, "foo/bar.cc", -1, "Failure!"),
+        r3_(TestPartResult::kFatalFailure, NULL, -1, "Failure!") {}
 
   TestPartResult r1_, r2_, r3_;
 };
 
 // Tests TestPartResult::type().
 TEST_F(TestPartResultTest, type) {
-  EXPECT_EQ(TPRT_SUCCESS, r1_.type());
-  EXPECT_EQ(TPRT_NONFATAL_FAILURE, r2_.type());
-  EXPECT_EQ(TPRT_FATAL_FAILURE, r3_.type());
+  EXPECT_EQ(TestPartResult::kSuccess, r1_.type());
+  EXPECT_EQ(TestPartResult::kNonFatalFailure, r2_.type());
+  EXPECT_EQ(TestPartResult::kFatalFailure, r3_.type());
 }
 
 // Tests TestPartResult::file_name().
@@ -85,8 +110,8 @@ TEST_F(TestPartResultTest, NonfatallyFailed) {
 class TestPartResultArrayTest : public Test {
  protected:
   TestPartResultArrayTest()
-      : r1_(TPRT_NONFATAL_FAILURE, "foo/bar.cc", -1, "Failure 1"),
-        r2_(TPRT_FATAL_FAILURE, "foo/bar.cc", -1, "Failure 2") {}
+      : r1_(TestPartResult::kNonFatalFailure, "foo/bar.cc", -1, "Failure 1"),
+        r2_(TestPartResult::kFatalFailure, "foo/bar.cc", -1, "Failure 2") {}
 
   const TestPartResult r1_, r2_;
 };
@@ -117,8 +142,6 @@ TEST_F(TestPartResultArrayTest, ContainsGivenResultsAfterTwoAppends) {
   EXPECT_STREQ("Failure 2", results.GetTestPartResult(1).message());
 }
 
-#if GTEST_HAS_DEATH_TEST
-
 typedef TestPartResultArrayTest TestPartResultArrayDeathTest;
 
 // Tests that the program dies when GetTestPartResult() is called with
@@ -127,11 +150,9 @@ TEST_F(TestPartResultArrayDeathTest, DiesWhenIndexIsOutOfBound) {
   TestPartResultArray results;
   results.Append(r1_);
 
-  EXPECT_DEATH(results.GetTestPartResult(-1), "");
-  EXPECT_DEATH(results.GetTestPartResult(1), "");
+  EXPECT_DEATH_IF_SUPPORTED(results.GetTestPartResult(-1), "");
+  EXPECT_DEATH_IF_SUPPORTED(results.GetTestPartResult(1), "");
 }
-
-#endif  // GTEST_HAS_DEATH_TEST
 
 // TODO(mheule@google.com): Add a test for the class HasNewFatalFailureHelper.
 

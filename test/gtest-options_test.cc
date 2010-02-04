@@ -40,11 +40,11 @@
 
 #include <gtest/gtest.h>
 
-#ifdef _WIN32_WCE
+#if GTEST_OS_WINDOWS_MOBILE
 #include <windows.h>
 #elif GTEST_OS_WINDOWS
 #include <direct.h>
-#endif  // _WIN32_WCE
+#endif  // GTEST_OS_WINDOWS_MOBILE
 
 // Indicates that this translation unit is part of Google Test's
 // implementation.  It must come before gtest-internal-inl.h is
@@ -130,7 +130,7 @@ TEST(XmlOutputTest, GetOutputFileFromDirectoryPath) {
 TEST(OutputFileHelpersTest, GetCurrentExecutableName) {
   const FilePath executable = GetCurrentExecutableName();
   const char* const exe_str = executable.c_str();
-#if defined(_WIN32_WCE) || GTEST_OS_WINDOWS
+#if GTEST_OS_WINDOWS
   ASSERT_TRUE(_strcmpi("gtest-options_test", exe_str) == 0 ||
               _strcmpi("gtest-options-ex_test", exe_str) == 0 ||
               _strcmpi("gtest_all_test", exe_str) == 0)
@@ -143,29 +143,21 @@ TEST(OutputFileHelpersTest, GetCurrentExecutableName) {
               String(exe_str) == "gtest_all_test" ||
               String(exe_str) == "lt-gtest_all_test")
                   << "GetCurrentExecutableName() returns " << exe_str;
-#endif
+#endif  // GTEST_OS_WINDOWS
 }
 
 class XmlOutputChangeDirTest : public Test {
  protected:
   virtual void SetUp() {
     original_working_dir_ = FilePath::GetCurrentDir();
-    ChDir("..");
+    posix::ChDir("..");
     // This will make the test fail if run from the root directory.
     EXPECT_STRNE(original_working_dir_.c_str(),
                  FilePath::GetCurrentDir().c_str());
   }
 
   virtual void TearDown() {
-    ChDir(original_working_dir_.c_str());
-  }
-
-  void ChDir(const char* dir) {
-#if GTEST_OS_WINDOWS
-    _chdir(dir);
-#else
-    chdir(dir);
-#endif
+    posix::ChDir(original_working_dir_.c_str());
   }
 
   FilePath original_working_dir_;

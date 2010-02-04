@@ -32,6 +32,12 @@
 // This file tests the internal cross-platform support utilities.
 
 #include <gtest/internal/gtest-port.h>
+
+#if GTEST_OS_MAC
+#include <pthread.h>
+#include <time.h>
+#endif  // GTEST_OS_MAC
+
 #include <gtest/gtest.h>
 #include <gtest/gtest-spi.h>
 
@@ -48,16 +54,16 @@ namespace testing {
 namespace internal {
 
 TEST(GtestCheckSyntaxTest, BehavesLikeASingleStatement) {
-  if (false)
+  if (AlwaysFalse())
     GTEST_CHECK_(false) << "This should never be executed; "
                            "It's a compilation test only.";
 
-  if (true)
+  if (AlwaysTrue())
     GTEST_CHECK_(true);
   else
     ;  // NOLINT
 
-  if (false)
+  if (AlwaysFalse())
     ;  // NOLINT
   else
     GTEST_CHECK_(true) << "";
@@ -76,7 +82,56 @@ TEST(GtestCheckSyntaxTest, WorksWithSwitch) {
       GTEST_CHECK_(true) << "Check failed in switch case";
 }
 
-#if GTEST_HAS_DEATH_TEST
+#if GTEST_OS_MAC
+void* ThreadFunc(void* data) {
+  pthread_mutex_t* mutex = reinterpret_cast<pthread_mutex_t*>(data);
+  pthread_mutex_lock(mutex);
+  pthread_mutex_unlock(mutex);
+  return NULL;
+}
+
+TEST(GetThreadCountTest, ReturnsCorrectValue) {
+  EXPECT_EQ(1U, GetThreadCount());
+  pthread_mutex_t mutex;
+  pthread_attr_t  attr;
+  pthread_t       thread_id;
+
+  // TODO(vladl@google.com): turn mutex into internal::Mutex for automatic
+  // destruction.
+  pthread_mutex_init(&mutex, NULL);
+  pthread_mutex_lock(&mutex);
+  ASSERT_EQ(0, pthread_attr_init(&attr));
+  ASSERT_EQ(0, pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE));
+
+  const int status = pthread_create(&thread_id, &attr, &ThreadFunc, &mutex);
+  ASSERT_EQ(0, pthread_attr_destroy(&attr));
+  ASSERT_EQ(0, status);
+  EXPECT_EQ(2U, GetThreadCount());
+  pthread_mutex_unlock(&mutex);
+
+  void* dummy;
+  ASSERT_EQ(0, pthread_join(thread_id, &dummy));
+
+  // MacOS X may not immediately report the updated thread count after
+  // joining a thread, causing flakiness in this test. To counter that, we
+  // wait for up to .5 seconds for the OS to report the correct value.
+  for (int i = 0; i < 5; ++i) {
+    if (GetThreadCount() == 1)
+      break;
+
+    timespec time;
+    time.tv_sec = 0;
+    time.tv_nsec = 100L * 1000 * 1000;  // .1 seconds.
+    nanosleep(&time, NULL);
+  }
+  EXPECT_EQ(1U, GetThreadCount());
+  pthread_mutex_destroy(&mutex);
+}
+#else
+TEST(GetThreadCountTest, ReturnsZeroWhenUnableToCountThreads) {
+  EXPECT_EQ(0U, GetThreadCount());
+}
+#endif  // GTEST_OS_MAC
 
 TEST(GtestCheckDeathTest, DiesWithCorrectOutputOnFailure) {
   const bool a_false_condition = false;
@@ -88,8 +143,11 @@ TEST(GtestCheckDeathTest, DiesWithCorrectOutputOnFailure) {
 #endif  // _MSC_VER
      ".*a_false_condition.*Extra info.*";
 
-  EXPECT_DEATH(GTEST_CHECK_(a_false_condition) << "Extra info", regex);
+  EXPECT_DEATH_IF_SUPPORTED(GTEST_CHECK_(a_false_condition) << "Extra info",
+                            regex);
 }
+
+#if GTEST_HAS_DEATH_TEST
 
 TEST(GtestCheckDeathTest, LivesSilentlyOnSuccess) {
   EXPECT_EXIT({
@@ -631,15 +689,11 @@ TEST(RETest, PartialMatchWorks) {
 
 #endif  // GTEST_USES_POSIX_RE
 
-#if GTEST_HAS_STD_STRING
-
 TEST(CaptureStderrTest, CapturesStdErr) {
   CaptureStderr();
   fprintf(stderr, "abc");
-  ASSERT_EQ("abc", GetCapturedStderr());
+  ASSERT_STREQ("abc", GetCapturedStderr().c_str());
 }
-
-#endif  // GTEST_HAS_STD_STRING
 
 }  // namespace internal
 }  // namespace testing
