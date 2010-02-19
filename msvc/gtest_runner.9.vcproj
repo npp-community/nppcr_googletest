@@ -18,9 +18,8 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
+			InheritedPropertySheets=".\N++CR.9.vsprops"
 			UseOfMFC="2"
 			CharacterSet="0"
 			>
@@ -94,9 +93,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
+			InheritedPropertySheets=".\N++CR.9.vsprops"
 			UseOfMFC="2"
 			CharacterSet="0"
 			WholeProgramOptimization="1"
@@ -180,7 +178,7 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\runner.cpp"
+				RelativePath="..\src\gtest_runner.cc"
 				>
 			</File>
 		</Filter>
