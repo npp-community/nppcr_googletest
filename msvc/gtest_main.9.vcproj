@@ -18,9 +18,8 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="Debug"
 			ConfigurationType="4"
-			InheritedPropertySheets=".\N++CR.vsprops"
+			InheritedPropertySheets=".\N++CR.9.vsprops"
 			CharacterSet="2"
 			>
 			<Tool
@@ -81,9 +80,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="Release"
 			ConfigurationType="4"
-			InheritedPropertySheets=".\N++CR.vsprops"
+			InheritedPropertySheets=".\N++CR.9.vsprops"
 			CharacterSet="2"
 			>
 			<Tool
@@ -143,7 +141,7 @@
 	<References>
 		<ProjectReference
 			ReferencedProjectIdentifier="{C8F6C172-56F2-4E76-B5FA-C3B423B31BE7}"
-			RelativePathToProject=".\gtest.vc.9.0.vcproj"
+			RelativePathToProject=".\gtest.9.vcproj"
 		/>
 	</References>
 	<Files>

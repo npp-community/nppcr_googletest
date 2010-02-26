@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioPropertySheet
+	ProjectType="Visual C++"
+	Version="8.00"
+	Name="N++CR"
+	OutputDirectory="$(SolutionDir)vc8/$(ConfigurationName)"
+	IntermediateDirectory="$(SolutionDir)vc8/$(ConfigurationName)/$(ProjectName)"
+	BuildLogFile="$(IntDir)\$(TargetName)_Buildlog.htm"
+	>
+	<Tool
+		Name="VCCLCompilerTool"
+		ProgramDataBaseFileName="$(IntDir)\vc80.pdb"
+	/>
+</VisualStudioPropertySheet>

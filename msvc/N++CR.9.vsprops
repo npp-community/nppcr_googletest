@@ -3,7 +3,8 @@
 	ProjectType="Visual C++"
 	Version="8.00"
 	Name="N++CR"
-	IntermediateDirectory="$(ConfigurationName)\$(ProjectName)"
+	OutputDirectory="$(SolutionDir)vc9/$(ConfigurationName)"
+	IntermediateDirectory="$(SolutionDir)vc9/$(ConfigurationName)/$(ProjectName)"
 	BuildLogFile="$(IntDir)\$(TargetName)_Buildlog.htm"
 	>
 	<Tool
