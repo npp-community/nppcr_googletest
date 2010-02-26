@@ -50,16 +50,10 @@
 #include <pthread.h>
 #endif  // GTEST_HAS_PTHREAD
 
-#if GTEST_OS_LINUX
-#include <string.h>
-#include <signal.h>
-#include <string>
-#include <vector>
-#endif  // GTEST_OS_LINUX
-
 using testing::ScopedFakeTestPartResultReporter;
 using testing::TestPartResultArray;
 
+namespace posix = ::testing::internal::posix;
 using testing::internal::String;
 
 // Tests catching fatal failures.
@@ -236,7 +230,6 @@ void AdHocTest() {
   EXPECT_TRUE(false);
   EXPECT_EQ(2, 3);
 }
-
 
 // Runs all TESTs, all TEST_Fs, and the ad hoc test.
 int RunAllTests() {
@@ -750,11 +743,11 @@ class TypedTestP : public testing::Test {
 TYPED_TEST_CASE_P(TypedTestP);
 
 TYPED_TEST_P(TypedTestP, Success) {
-  EXPECT_EQ(0, TypeParam());
+  EXPECT_EQ(0U, TypeParam());
 }
 
 TYPED_TEST_P(TypedTestP, Failure) {
-  EXPECT_EQ(1, TypeParam()) << "Expected failure";
+  EXPECT_EQ(1U, TypeParam()) << "Expected failure";
 }
 
 REGISTER_TYPED_TEST_CASE_P(TypedTestP, Success, Failure);
@@ -815,7 +808,7 @@ INSTANTIATE_TYPED_TEST_CASE_P(My, ATypeParamDeathTest, NumericTypes);
 // Tests various failure conditions of
 // EXPECT_{,NON}FATAL_FAILURE{,_ON_ALL_THREADS}.
 class ExpectFailureTest : public testing::Test {
- protected:
+ public:  // Must be public and not protected due to a bug in g++ 3.4.2.
   enum FailureMode {
     FATAL_FAILURE,
     NONFATAL_FAILURE
@@ -976,9 +969,15 @@ GTEST_DEFINE_bool_(internal_skip_environment_and_ad_hoc_tests, false,
 // of them are intended to fail), and then compare the test results
 // with the "golden" file.
 int main(int argc, char **argv) {
+  testing::GTEST_FLAG(print_time) = false;
+
   // We just run the tests, knowing some of them are intended to fail.
   // We will use a separate Python script to compare the output of
   // this program with the golden file.
+
+  // It's hard to test InitGoogleTest() directly, as it has many
+  // global side effects.  The following line serves as a sanity test
+  // for it.
   testing::InitGoogleTest(&argc, argv);
   if (argc >= 2 &&
       String(argv[1]) == "--gtest_internal_skip_environment_and_ad_hoc_tests")
@@ -989,16 +988,9 @@ int main(int argc, char **argv) {
     // Skip the usual output capturing if we're running as the child
     // process of an threadsafe-style death test.
 #if GTEST_OS_WINDOWS
-#ifdef _MSC_VER
-#pragma warning(push)
-#pragma warning(disable:4996)
-#endif  // _MSC_VER
-    freopen("nul:", "w", stdout);
-#ifdef _MSC_VER
-#pragma warning(pop)
-#endif  // _MSC_VER
+    posix::FReopen("nul:", "w", stdout);
 #else
-    freopen("/dev/null", "w", stdout);
+    posix::FReopen("/dev/null", "w", stdout);
 #endif  // GTEST_OS_WINDOWS
     return RUN_ALL_TESTS();
   }

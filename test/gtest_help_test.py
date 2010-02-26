@@ -39,22 +39,17 @@ SYNOPSIS
 
 __author__ = 'wan@google.com (Zhanyong Wan)'
 
-import gtest_test_utils
 import os
 import re
-import unittest
+import gtest_test_utils
 
 
 IS_WINDOWS = os.name == 'nt'
 
-if IS_WINDOWS:
-  PROGRAM = 'gtest_help_test_.exe'
-else:
-  PROGRAM = 'gtest_help_test_'
-
-PROGRAM_PATH = os.path.join(gtest_test_utils.GetBuildDir(), PROGRAM)
+PROGRAM_PATH = gtest_test_utils.GetTestExecutablePath('gtest_help_test_')
 FLAG_PREFIX = '--gtest_'
 CATCH_EXCEPTIONS_FLAG = FLAG_PREFIX + 'catch_exceptions'
+DEATH_TEST_STYLE_FLAG = FLAG_PREFIX + 'death_test_style'
 
 # The help message must match this regex.
 HELP_REGEX = re.compile(
@@ -62,6 +57,8 @@ HELP_REGEX = re.compile(
     FLAG_PREFIX + r'filter=.*' +
     FLAG_PREFIX + r'also_run_disabled_tests.*' +
     FLAG_PREFIX + r'repeat=.*' +
+    FLAG_PREFIX + r'shuffle.*' +
+    FLAG_PREFIX + r'random_seed=.*' +
     FLAG_PREFIX + r'color=.*' +
     FLAG_PREFIX + r'print_time.*' +
     FLAG_PREFIX + r'output=.*' +
@@ -87,7 +84,7 @@ def RunWithFlag(flag):
   return child.exit_code, child.output
 
 
-class GTestHelpTest(unittest.TestCase):
+class GTestHelpTest(gtest_test_utils.TestCase):
   """Tests the --help flag and its equivalent forms."""
 
   def TestHelpFlag(self, flag):
@@ -99,8 +96,10 @@ class GTestHelpTest(unittest.TestCase):
     self.assert_(HELP_REGEX.search(output), output)
     if IS_WINDOWS:
       self.assert_(CATCH_EXCEPTIONS_FLAG in output, output)
+      self.assert_(DEATH_TEST_STYLE_FLAG not in output, output)
     else:
       self.assert_(CATCH_EXCEPTIONS_FLAG not in output, output)
+      self.assert_(DEATH_TEST_STYLE_FLAG in output, output)
 
   def testPrintsHelpWithFullFlag(self):
     self.TestHelpFlag('--help')

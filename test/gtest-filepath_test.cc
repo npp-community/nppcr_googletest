@@ -50,17 +50,20 @@
 #include "src/gtest-internal-inl.h"
 #undef GTEST_IMPLEMENTATION_
 
-#ifdef _WIN32_WCE
+#if GTEST_OS_WINDOWS_MOBILE
 #include <windows.h>  // NOLINT
 #elif GTEST_OS_WINDOWS
 #include <direct.h>  // NOLINT
-#endif  // _WIN32_WCE
+#endif  // GTEST_OS_WINDOWS_MOBILE
 
 namespace testing {
 namespace internal {
 namespace {
 
-#ifdef _WIN32_WCE
+#if GTEST_OS_WINDOWS_MOBILE
+// TODO(wan@google.com): Move these to the POSIX adapter section in
+// gtest-port.h.
+
 // Windows CE doesn't have the remove C function.
 int remove(const char* path) {
   LPCWSTR wpath = String::AnsiToUtf16(path);
@@ -78,30 +81,27 @@ int _rmdir(const char* path) {
   return ret;
 }
 
-#endif  // _WIN32_WCE
-
-#ifndef _WIN32_WCE
+#else
 
 TEST(GetCurrentDirTest, ReturnsCurrentDir) {
   const FilePath original_dir = FilePath::GetCurrentDir();
   EXPECT_FALSE(original_dir.IsEmpty());
 
-#if GTEST_OS_WINDOWS
-  _chdir(GTEST_PATH_SEP_);
+  posix::ChDir(GTEST_PATH_SEP_);
   const FilePath cwd = FilePath::GetCurrentDir();
-  _chdir(original_dir.c_str());
+  posix::ChDir(original_dir.c_str());
+
+#if GTEST_OS_WINDOWS
   // Skips the ":".
   const char* const cwd_without_drive = strchr(cwd.c_str(), ':');
   ASSERT_TRUE(cwd_without_drive != NULL);
   EXPECT_STREQ(GTEST_PATH_SEP_, cwd_without_drive + 1);
 #else
-  chdir(GTEST_PATH_SEP_);
-  EXPECT_STREQ(GTEST_PATH_SEP_, FilePath::GetCurrentDir().c_str());
-  chdir(original_dir.c_str());
+  EXPECT_STREQ(GTEST_PATH_SEP_, cwd.c_str());
 #endif
 }
 
-#endif  // _WIN32_WCE
+#endif  // GTEST_OS_WINDOWS_MOBILE
 
 TEST(IsEmptyTest, ReturnsTrueForEmptyPath) {
   EXPECT_TRUE(FilePath("").IsEmpty());
@@ -154,7 +154,7 @@ TEST(RemoveDirectoryNameTest, ShouldAlsoGiveFileName) {
 
 // RemoveFileName "" -> "./"
 TEST(RemoveFileNameTest, EmptyName) {
-#ifdef _WIN32_WCE
+#if GTEST_OS_WINDOWS_MOBILE
   // On Windows CE, we use the root as the current directory.
   EXPECT_STREQ(GTEST_PATH_SEP_,
       FilePath("").RemoveFileName().c_str());
@@ -342,12 +342,12 @@ TEST(DirectoryTest, RootOfWrongDriveDoesNotExists) {
 }
 #endif  // GTEST_OS_WINDOWS
 
-#ifndef _WIN32_WCE
+#if !GTEST_OS_WINDOWS_MOBILE
 // Windows CE _does_ consider an empty directory to exist.
 TEST(DirectoryTest, EmptyPathDirectoryDoesNotExist) {
   EXPECT_FALSE(FilePath("").DirectoryExists());
 }
-#endif  // ! _WIN32_WCE
+#endif  // !GTEST_OS_WINDOWS_MOBILE
 
 TEST(DirectoryTest, CurrentDirectoryExists) {
 #if GTEST_OS_WINDOWS  // We are on Windows.
@@ -436,36 +436,21 @@ class DirectoryCreationTest : public Test {
     remove(testdata_file_.c_str());
     remove(unique_file0_.c_str());
     remove(unique_file1_.c_str());
-#if GTEST_OS_WINDOWS
-    _rmdir(testdata_path_.c_str());
-#else
-    rmdir(testdata_path_.c_str());
-#endif  // GTEST_OS_WINDOWS
+    posix::RmDir(testdata_path_.c_str());
   }
 
   virtual void TearDown() {
     remove(testdata_file_.c_str());
     remove(unique_file0_.c_str());
     remove(unique_file1_.c_str());
-#if GTEST_OS_WINDOWS
-    _rmdir(testdata_path_.c_str());
-#else
-    rmdir(testdata_path_.c_str());
-#endif  // GTEST_OS_WINDOWS
+    posix::RmDir(testdata_path_.c_str());
   }
 
   String TempDir() const {
-#ifdef _WIN32_WCE
+#if GTEST_OS_WINDOWS_MOBILE
     return String("\\temp\\");
-
 #elif GTEST_OS_WINDOWS
-    // MSVC 8 deprecates getenv(), so we want to suppress warning 4996
-    // (deprecated function) there.
-#pragma warning(push)          // Saves the current warning state.
-#pragma warning(disable:4996)  // Temporarily disables warning 4996.
-    const char* temp_dir = getenv("TEMP");
-#pragma warning(pop)           // Restores the warning state.
-
+    const char* temp_dir = posix::GetEnv("TEMP");
     if (temp_dir == NULL || temp_dir[0] == '\0')
       return String("\\temp\\");
     else if (String(temp_dir).EndsWith("\\"))
@@ -474,20 +459,11 @@ class DirectoryCreationTest : public Test {
       return String::Format("%s\\", temp_dir);
 #else
     return String("/tmp/");
-#endif
+#endif  // GTEST_OS_WINDOWS_MOBILE
   }
 
   void CreateTextFile(const char* filename) {
-#if GTEST_OS_WINDOWS
-    // MSVC 8 deprecates fopen(), so we want to suppress warning 4996
-    // (deprecated function) there.#pragma warning(push)
-#pragma warning(push)          // Saves the current warning state.
-#pragma warning(disable:4996)  // Temporarily disables warning 4996.
-    FILE* f = fopen(filename, "w");
-#pragma warning(pop)           // Restores the warning state.
-#else  // We are on Linux or Mac OS.
-    FILE* f = fopen(filename, "w");
-#endif  // GTEST_OS_WINDOWS
+    FILE* f = posix::FOpen(filename, "w");
     fprintf(f, "text\n");
     fclose(f);
   }
